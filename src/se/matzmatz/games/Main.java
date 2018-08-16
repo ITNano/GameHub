@@ -6,6 +6,8 @@ public class Main {
 		if(ProgramUpdater.checkForUpdates()) {
 			ProgramUpdater.doUpdate();
 		}
+		
+		GameFactory.getRandomGame().playGame();
 	}
 	
 }
