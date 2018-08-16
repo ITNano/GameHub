@@ -1,16 +1,20 @@
 package se.matzmatz.games.pingpong;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.util.Duration;
+import se.matzmatz.games.pingpong.model.Ball;
+import se.matzmatz.games.pingpong.model.GameObject;
+import se.matzmatz.games.pingpong.model.Model;
 
 public class UIController {
+
+	private static final int WIDTH = 800;
+	private static final int HEIGHT = 500;
 
 	@FXML
 	private Label player1_score;
@@ -24,36 +28,36 @@ public class UIController {
 	@FXML
 	private Button startButton;
 	
+	@FXML
+	private Canvas gameArea;
+	
 	private Model model;
 	private boolean started = false;
 	
 	public UIController() {
-		model = new Model();
+		model = new Model(WIDTH, HEIGHT);
 	}
 	
 	public void playGame() {
 		if(!started) {
 			this.started = true;
 			this.startButton.setDisable(true);
-			bindToTime(time);
+			// this.time.textProperty().bind(model.clockTime().asString());
 			model.startGame();
+			new Timer().scheduleAtFixedRate(new TimerTask() {
+				@Override
+				public void run() {
+					updateScreen();
+				}
+			}, 0, 20);
 		}
 	}
 	
-	
-	private void bindToTime(Label label) {
-		Timeline timeline = new Timeline(
-				new KeyFrame(Duration.seconds(0), new EventHandler<ActionEvent>() {
-					@Override public void handle(ActionEvent actionEvent) {
-						int time = model.getClockTime();
-						label.setText(doubleDigit(time/60)+":"+doubleDigit(time%60));
-					}
-				}
-						),
-				new KeyFrame(Duration.seconds(1))
-				);
-		timeline.setCycleCount(Animation.INDEFINITE);
-		timeline.play();
+	private void updateScreen() {
+		gameArea.getGraphicsContext2D().clearRect(0, 0, WIDTH, HEIGHT);
+		for(GameObject obj : model.getGameObjects()) {
+			UIFactory.drawObject(gameArea.getGraphicsContext2D(), obj);
+		}
 	}
 	
 	private String doubleDigit(int num) {
