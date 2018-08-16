@@ -79,6 +79,6 @@
             </Label>
          </children>
       </AnchorPane>
-      <Canvas height="500.0" layoutY="100.0" width="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" />
+      <Canvas fx:id="gameArea" height="500.0" layoutY="100.0" width="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" />
    </children>
 </AnchorPane>
